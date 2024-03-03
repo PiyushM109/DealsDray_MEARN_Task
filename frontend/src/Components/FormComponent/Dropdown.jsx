@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
-const Dropdown = ({ options }) => {
+const Dropdown = ({ options, selectedOption, setSelectedOption }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(null);
+  // const [selectedOption, setSelectedOption] = useState(null);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -16,13 +16,13 @@ const Dropdown = ({ options }) => {
   return (
     <div>
       <div className=' bg-gray-600 text-gray-400' onClick={toggleDropdown}>
-        {selectedOption ? selectedOption.label : 'Designation'}
+        {selectedOption ? selectedOption : 'Designation'}
       </div>
       {isOpen && (
         <ul >
           {options.map((option) => (
-            <li key={option.value} onClick={() => handleOptionClick(option)}>
-              {option.label}
+            <li key={option} onClick={() => handleOptionClick(option)}>
+              {option}
             </li>
           ))}
         </ul>

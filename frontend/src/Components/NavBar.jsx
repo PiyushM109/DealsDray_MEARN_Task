@@ -23,26 +23,32 @@ const NavBar = () => {
   }, []);
   if (username === "") {
     return (
-      <div className="bg-slate-50 p-2 drop-shadow-md flex justify-between">
+      <div className="w-full bg-slate-50 p-2 drop-shadow-md flex justify-between">
         <img className="w-20 drop-shadow-lg" src="logo.png" alt="logo" />
       </div>
     );
   }
   return (
-    <div className="bg-slate-50 p-2 drop-shadow-md flex justify-between">
+    <div className="w-full bg-slate-50 p-2 drop-shadow-md flex justify-between">
       <img className="w-20 drop-shadow-lg" src="logo.png" alt="logo" />
-      <h3>Home</h3>
+      <h3 className="my-auto mx-4">Home</h3>
 
-      <h3>Employee List</h3>
+      <button onClick={()=>{
+        navigate("/dashboard")
+      }}>Employee List</button>
 
-      <h3>{username}</h3>
+      <h3></h3>
 
-      <button
+      <div className="flex">
+        <h3 className="my-auto mx-4">{username}</h3>
+        <button
         onClick={() => {
           localStorage.removeItem("token");
           navigate("/");
         }}
       >logout</button>
+      </div>
+      
     </div>
   );
 };
