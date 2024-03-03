@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./Login";
 import Dashboard from "./Dashboard";
-
+import EmployeeList from "./EmployeeList";
 
 const Body = () => {
   const appRouter = createBrowserRouter([
@@ -10,9 +10,13 @@ const Body = () => {
       element: <Login />,
     },
     {
-        path: "/dashboard",
-        element: <Dashboard/>,
-      },
+      path: "/dashboard",
+      element: <Dashboard />,
+    },
+    {
+      path: "/employeeList",
+      element: <EmployeeList />
+    }
   ]);
   return (
     <div>

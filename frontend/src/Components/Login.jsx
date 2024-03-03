@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import NavBar from "./NavBar";
 
 const Login = () => {
   const [user, setUser] = useState("");
@@ -10,8 +11,6 @@ const Login = () => {
 
   const logIn = (e) => {
     e.preventDefault();
-    console.log(user);
-    console.log(pass);
     const url = "http://localhost:3000/login";
     const headers = {
         username : user,
@@ -34,7 +33,8 @@ const Login = () => {
 
   return (
     <div className="w-full h-full">
-      <img className="w-20 m-2" src="logo.png" alt="DealsDray logo" />
+      <NavBar />
+      <div className="mt-28">
       <form
         className="w-3/12 mx-auto p-12 my-30 bg-black left-0 right-0 text-white rounded-lg bg-opacity-30 shadow-xl"
         onSubmit={logIn}
@@ -62,6 +62,7 @@ const Login = () => {
           L O G I N
         </button>
       </form>
+      </div>
     </div>
   );
 };
