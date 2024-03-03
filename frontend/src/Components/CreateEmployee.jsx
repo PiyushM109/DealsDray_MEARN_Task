@@ -15,7 +15,7 @@ const CreateEmployee = () => {
   const [gender, setGender] = useState("");
   const [selectedOption, setSelectedOption] = useState(null);
   const [course, setCourse] = useState([]);
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState(null);
 
   const handleGenderChange = (event) => {
     setGender(event.target.value);
@@ -35,7 +35,18 @@ const CreateEmployee = () => {
     setImage(file);
   };
 
+  const MAX_MOBILE_LENGTH = 10;
+
+  const handleMobileNoChange = (event) => {
+    // Limiting mobile number length dynamically
+    const value = event.target.value;
+    if (value.length <= MAX_MOBILE_LENGTH) {
+      setMobileNo(value);
+    }
+  };
+
   const headers = {
+    "Content-Type": "multipart/form-data",
     Authorization: "Bearer " + localStorage.getItem("token"),
   };
 
@@ -75,7 +86,7 @@ const CreateEmployee = () => {
     setMobileNo("");
     setGender("");
     setCourse([]);
-    setImage("");
+    setImage(null);
     setSelectedOption(null);
   };
 
@@ -94,6 +105,7 @@ const CreateEmployee = () => {
             placeholder="Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            required
           />
           <input
             className="px-2 m-2 py-3 w-full bg-gray-600 rounded-md"
@@ -101,19 +113,22 @@ const CreateEmployee = () => {
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            required
           />
           <input
             className="px-2 m-2 py-3 w-full bg-gray-600 rounded-md"
             type="number"
             placeholder="Mobile No"
             value={mobileNo}
-            onChange={(e) => setMobileNo(e.target.value)}
+            onChange={(e) => handleMobileNoChange(e)}
+            required
           />
           <div className="px-2 m-2 py-3 w-full bg-gray-600 rounded-md cursor-pointer">
             <Dropdown
               options={options}
               selectedOption={selectedOption}
               setSelectedOption={setSelectedOption}
+              
             />
           </div>
           <div className="px-2 m-2 my-3 py-3 w-full bg-gray-600 text-gray-400 flex rounded-md">
@@ -125,6 +140,7 @@ const CreateEmployee = () => {
                 value="M"
                 checked={gender === "M"}
                 onChange={handleGenderChange}
+                required
               />
               <label className="font-bold" htmlFor="male">
                 M
@@ -173,13 +189,7 @@ const CreateEmployee = () => {
             />
             <label htmlFor="bsc"> BSC </label>
           </div>
-          <input
-            className="px-2 m-2 py-3 w-full bg-gray-600 rounded-md"
-            type="text"
-            placeholder="Image Link"
-            value={image}
-            onChange={(e) => setImage(e.target.value)}
-          />
+          <input type="file" onChange={handleImageChange} />
           <button
             type="submit"
             className="px-2 m-2 py-3 w-full bg-slate-50 rounded-md font-bold text-black hover:bg-slate-300 shadow-sm"

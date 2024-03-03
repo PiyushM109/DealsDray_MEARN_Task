@@ -5,6 +5,9 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const User = require("./models/user");
 const Employee = require("./models/employee");
+const multer = require("multer");
+const { storage } = require("./cloudConfig.js");
+const upload = multer({ storage })
 
 app.use(cors());
 
@@ -63,8 +66,9 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.post("/addEmployee", authenticateJwt, async (req, res) => {
+app.post("/addEmployee", authenticateJwt,upload.single('image'), async (req, res) => {
   try {
+    let url = await req.file.path;
     const data = req.body;
     const all = await Employee.find();
     const existingEmployee = await Employee.findOne({ name: data.name });
@@ -75,6 +79,7 @@ app.post("/addEmployee", authenticateJwt, async (req, res) => {
     const id = all.length + 1;
     const currEmployee = {
         ...data,
+        image:url,
         date : Date.now(),
         id : id
     }
@@ -115,7 +120,7 @@ app.get("/employee/:empId",authenticateJwt,async (req,res)=>{
 });
 
 
-app.delete("/delete/:empId",authenticateJwt,async (req,res)=>{
+app.post("/delete/:empId",authenticateJwt,async (req,res)=>{
     const {empId} = req.params;
     console.log(empId);
     try{

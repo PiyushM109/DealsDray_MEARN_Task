@@ -8,6 +8,8 @@ import EmpList from "./EmpList";
 const Dashboard = () => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [empList, setempList] = useState([]);
+  const [searchText, setSearchText] = useState("");
+  const [filterList, setFilterList] = useState([]);
   const navigate = useNavigate();
 
   const headers = {
@@ -20,9 +22,10 @@ const Dashboard = () => {
       setLoggedIn(true);
       // console.log("Piyus");
       axios
-        .get("http://localhost:3000/empList", { headers:headers })
+        .get("http://localhost:3000/empList", { headers: headers })
         .then((res) => {
           setempList(res.data);
+          setFilterList(res.data);
         })
         .catch((err) => {
           console.log(err);
@@ -30,7 +33,14 @@ const Dashboard = () => {
     } else {
       setLoggedIn(false);
     }
-  }, []); 
+  }, []);
+  const handleSearch = (event) => {
+    event.preventDefault();
+    const filt = empList.filter((emp) =>
+    emp.name.toLowerCase().includes(searchText.toLowerCase())
+  );
+    setFilterList(filt);
+  };
   if (!loggedIn) {
     return (
       <div>
@@ -55,12 +65,30 @@ const Dashboard = () => {
   return (
     <div>
       <NavBar />
-      <HeadBar len={empList.length}/>
-      {empList.length!=0 && <EmpList empList={empList}/>}
+      <HeadBar len={empList.length} />
+      <div className="flex justify-end px-3">
+        <form onSubmit={handleSearch}>
+          <input
+            className="border border-gray-200 rounded-lg px-2 py-1 drop-shadow-sm"
+            type="text"
+            placeholder="Search Employee"
+            value={searchText}
+            onChange={(e) => {
+              setSearchText(e.target.value);
+            }}
+          />
+          <button className="bg-teal-100 px-5 py-1 mx-2 rounded-lg drop-shadow-md cursor-pointer hover:bg-teal-200 font-semibold">
+            Search
+          </button>
+        </form>
+      </div>
+      {empList.length != 0 && <EmpList empList={filterList} />}
 
-      {empList.length==0 && <div className="my-60 text-center left-0 right-0">
-        <h1 className="font-bold text-2xl">Welcome to Admin panel</h1>
-      </div>}
+      {empList.length == 0 && (
+        <div className="my-60 text-center left-0 right-0">
+          <h1 className="font-bold text-2xl">Welcome to Admin panel</h1>
+        </div>
+      )}
     </div>
   );
 };

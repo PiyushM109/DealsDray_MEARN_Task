@@ -24,6 +24,7 @@ const Login = () => {
 
     }).catch((err)=>{
         console.log(err);
+        alert("Invalid credentials");
     })
     
     
