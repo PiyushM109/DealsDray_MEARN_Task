@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./Login";
 import Dashboard from "./Dashboard";
 import CreateEmployee from "./CreateEmployee";
+import EditEmployee from "./EditEmployee";
 
 const Body = () => {
   const appRouter = createBrowserRouter([
@@ -16,6 +17,10 @@ const Body = () => {
     {
       path: "/createEmployee",
       element: <CreateEmployee />
+    },
+    {
+      path: "/editEmployee/:empId",
+      element: <EditEmployee />
     }
   ]);
   return (

@@ -68,7 +68,7 @@ app.post("/addEmployee", authenticateJwt, async (req, res) => {
     const data = req.body;
     const all = await Employee.find();
     const existingEmployee = await Employee.findOne({ name: data.name });
-    console.log(data);
+    // console.log(data);
     if (existingEmployee) {
       return res.status(400).json({ error: "Employee already exists" });
     }
@@ -90,6 +90,8 @@ app.post("/addEmployee", authenticateJwt, async (req, res) => {
   }
 });
 
+
+
 app.get("/empList", authenticateJwt, async (req, res) => {
     // console.log("Piyush");
     try{
@@ -101,8 +103,47 @@ app.get("/empList", authenticateJwt, async (req, res) => {
       }
 });
 
-app.delete("/delete/:empId",async (req,res)=>{
-    
+app.get("/employee/:empId",authenticateJwt,async (req,res)=>{
+    const {empId} = req.params;
+    try{
+        const employee = await Employee.findOne({_id:empId});
+        res.status(201).send(employee);
+    }catch(error) {
+        console.error("Error:", error);
+        res.status(500).json({ error: "Internal server error" });
+      }
+});
+
+
+app.delete("/delete/:empId",authenticateJwt,async (req,res)=>{
+    const {empId} = req.params;
+    console.log(empId);
+    try{
+        const data = await Employee.findByIdAndDelete({_id:empId});
+        res.status(201).send(data);
+    }catch(err){
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+app.put("/updateEmployee/:empId",authenticateJwt,async (req,res)=>{
+    const {data} = req.body;
+    const {empId} = req.params;
+    console.log(data);
+    try{
+        const existingdata = await Employee.findById(empId);
+        const newData = {
+            ...data,
+            id : existingdata.id,
+            date : existingdata.date
+        }
+        const updated = await Employee.findByIdAndUpdate(empId,newData)
+        console.log(updated);
+        res.status(201).send(updated);
+
+    }catch(err){
+        res.status(500).json({ error: "Internal server error" });
+    }
 })
 
 app.get("/", (req, res) => {
